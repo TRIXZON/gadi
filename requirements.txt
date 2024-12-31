@@ -3,3 +3,4 @@
  openai
 gunicorn==20.1.0
   transformers
+Pillow==9.5.0
