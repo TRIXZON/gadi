@@ -1,16 +1,19 @@
+import hashlib
+import os
 from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 import torch
 from transformers import CLIPProcessor, CLIPModel
 from PIL import Image
 from collections import Counter
 from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
 import openai
-import os  # os needed for handling the temp directory and dynamic port binding
 
 app = Flask(__name__)
+CORS(app)  # Enable Cross-Origin Resource Sharing
 
 # Set your OpenAI API key
-openai.api_key = "sk-svcacct-yKD3gzcyEzFGz9K8V3LehYdunwe_j1gIjDS33VaWZh7NEVonQnJic5a4-oVxKT3BlbkFJrgcNZBH9Emye0Lmkbzh11yxTtSkIwj30TfVoj6oEwVGPAmYOAkuxpj4Cu4cAA"
+openai.api_key = "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"
 
 # Load CLIP model and processor
 model = CLIPModel.from_pretrained("openai/clip-vit-base-patch16")
@@ -68,6 +71,12 @@ def generate_html_css(description, color):
 # Cache to avoid duplicate processing
 processed_images = {}
 
+# Function to hash the image (for caching purposes)
+def hash_image(image_path):
+    """Generate a hash for the image to use for caching."""
+    with open(image_path, "rb") as f:
+        return hashlib.md5(f.read()).hexdigest()
+
 # Route for processing image uploads
 @app.route('/process-image', methods=['POST'])
 def process_image():
@@ -123,6 +132,10 @@ def serve_index():
 if __name__ == '__main__':
     # Ensure the temp directory exists
     os.makedirs('temp', exist_ok=True)
+
+    # Bind to dynamic port for deployment (e.g., Render, Heroku)
+    port = int(os.environ.get("PORT", 5000))  # Render assigns a dynamic port
+    app.run(host='0.0.0.0', port=port, debug=True)
 
     # Bind to dynamic port for Render deployment
     port = int(os.environ.get("PORT", 5000))  # Render assigns a dynamic port
