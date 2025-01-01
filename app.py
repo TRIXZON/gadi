@@ -5,7 +5,6 @@ from PIL import Image
 from collections import Counter
 from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
 import openai
-import hashlib
 
 app = Flask(__name__)
 
