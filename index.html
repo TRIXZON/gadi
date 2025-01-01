@@ -92,32 +92,40 @@
             const generateButton = document.getElementById('generate-code');
             const loadingMessage = document.getElementById('loading-message');
 
+            // Check if a file is selected
             if (!fileInput.files.length) {
                 output.textContent = "Please upload an image first.";
                 copyButton.style.display = "none";
                 return;
             }
 
+            // Prepare UI for processing
             generateButton.style.display = "none"; // Hide the button during processing
             loadingMessage.style.display = "block"; // Show the loading message
 
+            // Prepare the data for the backend
             const formData = new FormData();
             formData.append('image', fileInput.files[0]);
 
             try {
+                // Send the image to the Flask backend
                 const response = await fetch('http://127.0.0.1:5000/process-image', {
                     method: 'POST',
                     body: formData
                 });
 
-                const data = await response.json();
+                const data = await response.json(); // Parse the JSON response
 
                 if (data.error) {
+                    // Display error message from the backend
                     output.textContent = `Error: ${data.error}`;
                     copyButton.style.display = "none";
                 } else {
+                    // Display the generated code and additional information
                     output.textContent = `Description: ${data.description}\nColor: ${data.color}\nGenerated Code:\n${data.generated_code}`;
                     copyButton.style.display = "inline-block";
+
+                    // Enable the "Copy Code" button
                     copyButton.onclick = () => {
                         navigator.clipboard.writeText(data.generated_code).then(() => {
                             alert('Code copied to clipboard!');
@@ -127,10 +135,12 @@
                     };
                 }
             } catch (error) {
+                // Handle connection issues or other errors
                 output.textContent = `Failed to connect to the server: ${error.message}`;
                 copyButton.style.display = "none";
             } finally {
-                generateButton.style.display = "inline-block"; // Show the button after processing
+                // Restore the UI after processing
+                generateButton.style.display = "inline-block"; // Show the button again
                 loadingMessage.style.display = "none"; // Hide the loading message
             }
         });
