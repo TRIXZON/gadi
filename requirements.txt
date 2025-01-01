@@ -1,6 +1,7 @@
-Flask==2.1.2
+Flask
 torch
-transformers==4.22.1
-Pillow==9.2.0
-webcolors==1.12
-openai==0.27.2
+transformers==4.11.3
+Pillow==8.4.0
+openai==0.10.2
+webcolors==1.11
+tokenizers==0.10.3  
