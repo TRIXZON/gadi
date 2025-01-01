@@ -1,7 +1,7 @@
-﻿ flask 
- torch
- openai
-gunicorn==20.1.0
-  transformers
-Pillow==9.5.0
-  webcolors==1.11.1
+Flask==2.2.2
+flask-cors==3.1.1
+torch==1.13.1
+transformers==4.26.1
+Pillow==9.3.0
+webcolors==1.11
+openai==0.27.0
