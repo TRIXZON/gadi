@@ -3,10 +3,9 @@ import torch
 from transformers import CLIPProcessor, CLIPModel
 from PIL import Image
 from collections import Counter
-from webcolors import rgb_to_name, CSS3_HEX_TO_NAMES, hex_to_rgb
+from webcolors import rgb_to_name, hex_to_rgb, HTML4_NAMES_TO_HEX  # Adjust imports
+
 import openai
-import os
-import hashlib
 
 app = Flask(__name__)
 
