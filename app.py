@@ -5,6 +5,7 @@ from PIL import Image
 from collections import Counter
 from webcolors import rgb_to_name, hex_to_rgb, CSS3_HEX_TO_NAMES
 import openai
+import os  # os needed for handling the temp directory and dynamic port binding
 
 app = Flask(__name__)
 
@@ -64,11 +65,6 @@ def generate_html_css(description, color):
     )
     return response['choices'][0]['message']['content']
 
-# Function to hash images for caching
-def hash_image(image_path):
-    with open(image_path, "rb") as f:
-        return hashlib.md5(f.read()).hexdigest()
-
 # Cache to avoid duplicate processing
 processed_images = {}
 
@@ -125,5 +121,9 @@ def serve_index():
     return send_from_directory('.', 'index.html')
 
 if __name__ == '__main__':
-    os.makedirs('temp', exist_ok=True)  # Temporary folder for image uploads
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Ensure the temp directory exists
+    os.makedirs('temp', exist_ok=True)
+
+    # Bind to dynamic port for Render deployment
+    port = int(os.environ.get("PORT", 5000))  # Render assigns a dynamic port
+    app.run(host='0.0.0.0', port=port, debug=True)
