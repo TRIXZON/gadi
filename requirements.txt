@@ -1,7 +1,6 @@
 Flask
 torch
-transformers==4.11.3
-Pillow==8.4.0
-openai==0.10.2
-webcolors==1.11
-tokenizers==0.10.3  
+transformers
+Pillow
+openai
+webcolors
