@@ -1,6 +1,8 @@
+
 Flask
 torch
 transformers
 Pillow
 openai
 webcolors
+gunicorn 
